@@ -18,6 +18,9 @@ First, you need to be sure that your Wirepas Gateway publish the network informa
 
 Then, this program the [Paho MQTT](https://pypi.org/project/paho-mqtt/) nuget to implement a MQTT Client and get the data publish on the MQTT Broker. Only MQTTClient object from the library is used on this example to use a client object to get the data.
 
+Figure 1 illustrates how we can use Backend Client and how we can use this sample
+![here_schematics](https://github.com/elaInnovation/Wirepas-Python-sample/blob/master/Images/wirepas_explain_sample_01.png)
+
 # Prerequist
 Before starting to use the program, it's necessary to install the requiered components to start your integration for this example and get data from Blue MESH tags. You need:
 - Python 3.7
