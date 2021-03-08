@@ -23,7 +23,7 @@ Before starting to use the program, it's necessary to install the requiered comp
 - Python 3.7
 - git
 - paho-mqtt
-- grpc
+- grpc / protoc
 
 First of all be sure that your raspberry is up to date by executing the following commands:
 ```bash
@@ -61,4 +61,20 @@ Once you have the code, it can be installed from your repository as well:
 
 There, you're ready to use the MQTT tools and start to develop your project wit the Paho Mqtt layer.
 
-## Install grpc
+## Install Protobuff
+To deceode the payload, you need to install and use protobuff. You can find more documentation to proceed in Python [here](https://developers.google.com/protocol-buffers/docs/pythontutorial). However, we explain how to do it in the next paragraph. But before codinf, you need to install all the dependencies to develop using Protobuf messages. 
+```bash
+  sudo pip3 install grpcio
+  sudo pip3 install grpcio-tools
+```
+
+With **protoc** you'll be ready to build your proto file and generate the class requiered to decode your Protobuff encoded messages.
+
+# Sample
+Here, one more step is missing to start your sample. You need to use the **proto file** provided in this sample to generate the python class usefull to decode your payload. To proceed, you need to use **protoc** to generate the file. In the main folder, enter the following command line:
+```bash
+  sudo python3 -m grpc_tools.protoc -I. --python_out=. ./proto/ElaCommon.proto
+  sudo python3 -m grpc_tools.protoc -I. --python_out=. ./proto/WirepasMessages.proto
+```
+
+Now you're ready to start the sample and decode the message contained in the mqtt payload.  
