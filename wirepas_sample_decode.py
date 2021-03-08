@@ -2,6 +2,9 @@ import paho.mqtt.client as mqtt
 import sys
 import binascii
 
+# define default Broker IP Address
+BROKER_IP_ADDRESS = "127.0.0.1"
+
 # Constant definition
 DESTINATION_ENDPOINT_MOVEMENT = 160
 DESTINATION_ENDPOINT_TEMPERATURE = 100
@@ -158,14 +161,57 @@ def on_message(client, userdata, msg):
         print("[Exception]\tIncoming Message : " , e)
         print("[Exception]\tCannot decode message", sys.exc_info()[0])
 
-client = mqtt.Client()
-client.on_connect = on_connect
-client.on_message = on_message
+##
+# @fn test_argv
+# @brief organize argv
+def test_argv():
+    #
+    broker_ip_address = BROKER_IP_ADDRESS
+    success = False
+    #
+    try:
+        num_arguments = len(sys.argv)
+        if (num_arguments >= 2):
+            broker_ip_address = str(sys.argv[1])
+            print("[info]\t[Configuration]\t==> Broker IP Address : ", broker_ip_address)
+            success = True
+        else:
+            print("[help]\tTo run this script, ou have to respect the following syntax :")
+            print("[help]\tsudo python3.7 wirepas_sample_decode.py <broker_ip_address>")
+            print("[help]\t\t<broker_ip_address> (Mandatory) : Use this parameter to define the IP Address or hostnam of the MQTT Broker")
+            success = False
+    except :
+        print("[Exception] An unexpected exception occurs for the input arguments :", sys.exc_info()[0])
+        success = False
+    #
+    # return tuple of results
+    return success, broker_ip_address
 
-client.connect("192.168.0.161", 1883, 60)
+##
+# @fn main
+# @brief main program to start decoding wirepas message from mqtt 
+if __name__ == "__main__":
+    """ main program """
 
-# Blocking call that processes network traffic, dispatches callbacks and
-# handles reconnecting.
-# Other loop*() functions are available that give a threaded interface and a
-# manual interface.
-client.loop_forever()
+    print("[wirepas_sample_decode.py][__main__] Enter in Python Wirepas Sample Decode")
+    #
+    # test if the arguments fullfil the program conditions
+    b_arg_ok, broker_ip_address  = test_argv()
+    if(b_arg_ok):
+        try:
+            #
+            client = mqtt.Client()
+            client.on_connect = on_connect
+            client.on_message = on_message
+
+            client.connect(broker_ip_address, 1883, 60)
+
+            # Blocking call that processes network traffic, dispatches callbacks and
+            # handles reconnecting.
+            # Other loop*() functions are available that give a threaded interface and a
+            # manual interface.
+            client.loop_forever()
+        except :
+            print("[Exception] An unexpected exception occurs during the scan :", sys.exc_info()[0])
+    else:
+        print("[wirepas_sample_decode.py][__main__][ERROR] The different parameters or the type of parameter is not the one expected !!!")
