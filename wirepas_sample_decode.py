@@ -20,14 +20,18 @@ import proto.WirepasMessages_pb2
 from proto.WirepasMessages_pb2 import GenericMessage
 from proto.WirepasMessages_pb2 import WirepasMessage
 
-# decode the data in two complement
+##
+# @fn twos_comp
+# @brief decode the data in two complement
 def twos_comp(val, bits):
     """compute the 2's complement of int value val"""
     if (val & (1 << (bits - 1))) != 0: # if sign bit is set e.g., 8bit: 128-255
         val = val - (1 << bits)        # compute negative value
     return val                         # return positive value as is
 
-# decode the temperature
+##
+# @fn decodeTemperature
+# @brief decode the temperature
 def decodeTemperature(payload):
     print("[Payload]\t[Temperature]\tRaw Payload : ", binascii.hexlify(payload))
     buffer = binascii.hexlify(payload)
@@ -43,7 +47,9 @@ def decodeTemperature(payload):
             print("[Payload]\t[Temperature]\tThis is not a temperature data")
             print("[Payload]\t[Temperature]\tType : ", type)
 
-# decode the temperature
+##
+# @fn decodeTemperatureAndHumidity
+# @brief decode the temperature
 def decodeTemperatureAndHumidity(payload):
     print("[Payload]\t[Temperature//Humidity]\tRaw Payload : ", binascii.hexlify(payload))
     buffer = binascii.hexlify(payload)
@@ -63,7 +69,9 @@ def decodeTemperatureAndHumidity(payload):
             print("[Payload]\t[Temperature//Humidity]\tThis is not a temperature data")
             print("[Payload]\t[Temperature//Humidity]\tType : ", type)
 
-# decode counter for magnetic, movement, digital output, digital input, anti tearing 
+##
+# @fn decodeStateAndCounter
+# @brief decode counter for magnetic, movement, digital output, digital input, anti tearing 
 def decodeStateAndCounter(payload):
     print("[Payload]\t[State and Count]\tRaw Payload : ", binascii.hexlify(payload))
     buffer = binascii.hexlify(payload)
@@ -95,7 +103,9 @@ def decodeStateAndCounter(payload):
             print("[Payload]\t[State and Count]\tThis is not a counter // state data")
             print("[Payload]\t[State and Count]\tType : ", type)
 
-# Common function to decode a wirepas payload
+##
+# @fn decodeWirepasPayload
+# @brief Common function to decode a wirepas payload
 def decodeWirepasPayload(packet_received_event):
     print("[Payload]\tTry decode payload from GenericMessage.Wirepas")
     if packet_received_event is None:
@@ -125,7 +135,9 @@ def decodeWirepasPayload(packet_received_event):
         else:
             print("[Payload]\t[Blue MESH]\tThis message is not supporter by this Python Script")
 
-# Common function to decode wirepas message
+##
+# @fn decodeMessage
+# @brief Common function to decode wirepas message
 def decodeMessage(message):
     if message is None:
         print("[Decode]\tNo message to decode")
@@ -136,8 +148,9 @@ def decodeMessage(message):
         else:
             print("[Decode]\t message : " + str(message.wirepas))
             decodeWirepasPayload(message.wirepas.packet_received_event)
-
-# The callback for when the client receives a CONNACK response from the server.
+##
+# @fn on_connect
+# @brief The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
 
@@ -145,7 +158,9 @@ def on_connect(client, userdata, flags, rc):
     # reconnect then subscriptions will be renewed.
     client.subscribe("#")
 
-# The callback for when a PUBLISH message is received from the server.
+##
+# @fn on_message
+# @brief The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
     print("==========NEW DATA RECEIVED==========")
     print("Topic : " +  msg.topic)
