@@ -247,9 +247,7 @@ if __name__ == "__main__":
             client.on_connect = on_connect
             client.on_message = on_message
 
-            print("coonecting")
             client.connect(broker_ip_address, port, 60)
-            print("coonected")
 
             # Blocking call that processes network traffic, dispatches callbacks and
             # handles reconnecting.
